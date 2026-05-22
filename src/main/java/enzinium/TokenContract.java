@@ -107,7 +107,7 @@ public class TokenContract {
             require(balanceOf(ownerPK) >= units);
             this.getBalances().compute(ownerPK, (pk, tokens) -> tokens - units);
             this.getBalances().put(recipient, balanceOf(recipient) + units);
-        } catch (InsufficientTokensException e) {
+        } catch (IllegalArgumentException e) {
             // fails silently
         }      
     };
@@ -117,15 +117,15 @@ public class TokenContract {
             require(balanceOf(sender) >= units);
             this.getBalances().put(sender, balanceOf(sender) - units);
             this.getBalances().put(recipient, balanceOf(recipient) + units);
-        } catch (InsufficientTokensException e) {
+        } catch (IllegalArgumentException e) {
             // fails silently
         }   
     }
 
-    void require(Boolean holds) throws InsufficientTokensException {
-        // The great majority of runtime exceptions indicate preconditiom violations
+    void require(Boolean holds) {
+        // Runtime exceptions are appropriate for precondition violations.
         if (! holds) {
-            throw new InsufficientTokensException(
+            throw new IllegalArgumentException(
                 "No dispones de tokens suficientes para completar la transaccion.");
         }
     }
@@ -158,7 +158,7 @@ public class TokenContract {
             Double units = Math.floor(enziniums / tokenPrice);
             transfer(recipient, units);
             this.owner.transferEZI(units * tokenPrice);
-        } catch (InsufficientTokensException e) {
+        } catch (IllegalArgumentException e) {
             // fails silently
         }
     }

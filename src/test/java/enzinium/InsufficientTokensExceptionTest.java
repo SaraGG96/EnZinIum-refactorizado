@@ -17,8 +17,8 @@ public class InsufficientTokensExceptionTest {
         contract = new TokenContract(rick);
     }
     
-    @Test(expected = InsufficientTokensException.class)
-    public void InsufficientTokensExceptionThrowTest() throws InsufficientTokensException {
+    @Test(expected = IllegalArgumentException.class)
+    public void InsufficientTokensExceptionThrowTest() {
         contract.require(false);
     }
 
@@ -26,8 +26,8 @@ public class InsufficientTokensExceptionTest {
     public ExpectedException exceptionRule = ExpectedException.none();
 
     @Test
-    public void InsufficientTokensExceptionMessageTest() throws InsufficientTokensException {
-        exceptionRule.expect(InsufficientTokensException.class);
+    public void InsufficientTokensExceptionMessageTest() {
+        exceptionRule.expect(IllegalArgumentException.class);
         exceptionRule.expectMessage("No dispones de tokens suficientes para completar la transaccion.");
         contract.require(false);
     }
